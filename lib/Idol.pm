@@ -2,46 +2,51 @@ package Idol;
 use strict;
 use warnings;
 use utf8;
+use parent qw/Amon2/;
 our $VERSION='0.01';
 use 5.008001;
-use Idol::DB::Schema;
-use Idol::DB;
 
-use parent qw/Amon2/;
-# Enable project local mode.
-__PACKAGE__->make_local_context();
+__PACKAGE__->load_plugin(qw/DBI/);
 
-my $schema = Idol::DB::Schema->instance;
-
-sub db {
-    my $c = shift;
-    if (!exists $c->{db}) {
-        my $conf = $c->config->{DBI}
-            or die "Missing configuration about DBI";
-        $c->{db} = Idol::DB->new(
-            schema       => $schema,
-            connect_info => [@$conf],
-            # I suggest to enable following lines if you are using mysql.
-            # on_connect_do => [
-            #     'SET SESSION sql_mode=STRICT_TRANS_TABLES;',
-            # ],
-        );
+# initialize database
+use DBI;
+sub setup_schema {
+    my $self = shift;
+    my $dbh = $self->dbh();
+    my $driver_name = $dbh->{Driver}->{Name};
+    my $fname = lc("sql/${driver_name}.sql");
+    open my $fh, '<:encoding(UTF-8)', $fname or die "$fname: $!";
+    my $source = do { local $/; <$fh> };
+    for my $stmt (split /;/, $source) {
+        next unless $stmt =~ /\S/;
+        $dbh->do($stmt) or die $dbh->errstr();
     }
-    $c->{db};
+}
+
+use Teng;
+use Teng::Schema::Loader;
+use Idol::DB;
+my $schema;
+sub db {
+    my $self = shift;
+    if ( !defined $self->{db} ) {
+        my $conf = $self->config->{'DBI'}
+        or die "missing configuration for 'DBI'";
+        my $dbh = DBI->connect(@{$conf});
+        if ( !defined $schema ) {
+            $self->{db} = Teng::Schema::Loader->load(
+                namespace => 'Idol::DB',
+                dbh       => $dbh,
+	    );
+            $schema = $self->{db}->schema;
+        } else {
+            $self->{db} = Idol::DB->new(
+                dbh    => $dbh,
+                schema => $schema,
+	    );
+        }
+    }
+    return $self->{db};
 }
 
 1;
-__END__
-
-=head1 NAME
-
-Idol - Idol
-
-=head1 DESCRIPTION
-
-This is a main context class for Idol
-
-=head1 AUTHOR
-
-Idol authors.
-
