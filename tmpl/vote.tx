@@ -36,9 +36,17 @@
 
 <form method="post" action="/vote/<: $music.id :>">
     <fieldset>
-        <div><input type="text" name="serial_code" /></div>
+        <p>投票に必要なシリアルコードを入力してください</p>
+        <div><input type="text" name="serial_code" maxlength="8" size="8" /></div>
         <div><input type="submit" value="シリアルコード" class="btn primary" /></div>
     </fieldset>
 </form>
+
+: if ($err_msg) {
+    : for $err_msg -> $msg {
+        <p class="has-error"><: $msg :></p>
+    : }
+
+: }
 
 : }
