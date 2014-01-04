@@ -1,0 +1,44 @@
+: cascade "include/layout.tx"
+
+: override content -> {
+
+<table class="table table-striped table-bordered">
+    : if ($music.id) {
+    <tr>
+        <th style="width:5em">
+            ID
+        </th>
+        <td>
+            <: $music.id :>
+        </td>
+    </tr>
+    : }
+    <tr>
+        <th>
+            タイトル
+        </th>
+        <td>
+            <: $music.title :>
+        </td>
+    </tr>
+    : if ($music.description) {
+    <tr>
+        <th>
+            説明
+        </th>
+        <td>
+            <: $music.description :>
+        </td>
+    </tr>
+    : }
+</table>
+
+
+<form method="post" action="/vote/<: $music.id :>">
+    <fieldset>
+        <div><input type="text" name="serial_code" /></div>
+        <div><input type="submit" value="シリアルコード" class="btn primary" /></div>
+    </fieldset>
+</form>
+
+: }
