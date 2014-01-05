@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS music (
     title VARCHAR(191) NOT NULL,
     description TEXT NULL,
     itune_url TEXT NULL,
-    img_url TEXT NULL,
+    img_url TEXT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
 
 CREATE TABLE IF NOT EXISTS music_rank (
