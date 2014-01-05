@@ -46,10 +46,10 @@ post '/vote/{music_id}' => sub {
         }
     }
     else {
+        my $validate_result = $c->db->validate_serial_code($serial_code);
 
-        my $is_valid_serial_code = $c->db->validate_serial_code($serial_code);
-
-        if ($is_valid_serial_code) {
+        if ($validate_result->{is_valid}) {
+            $validate_result->{serial_code}->vote_music($music);
             return $c->redirect('/vote_complete');
         }
         else {
