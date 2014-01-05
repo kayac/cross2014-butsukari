@@ -35,4 +35,14 @@ sub _generate_serial_code {
     return $serial_code;
 }
 
+sub validate_serial_code {
+    my ($self, $code) = @_;
+
+    if (defined $self->single('serial_code', { code => $code })) {
+        return 1;
+    }
+
+    return 0;
+}
+
 1;
