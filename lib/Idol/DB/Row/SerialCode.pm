@@ -19,7 +19,7 @@ sub vote_music {
             'music_rank' => {
                 serial_code => $self->code,
                 music_id => $music->{id},
-                created_at => localtime->strftime('%Y/%m/%d 00:00:00')
+                created_at => localtime->strftime('%Y/%m/%d %H:%M:%S')
             }
         );
         $self->delete;
