@@ -4,7 +4,6 @@ use warnings;
 use utf8;
 use Amon2::Web::Dispatcher::RouterBoom;
 use FormValidator::Lite;
-use DDP;
 
 get '/' => sub {
     my $c = shift;
@@ -27,7 +26,7 @@ get '/vote/{music_id}' => sub {
 post '/vote/{music_id}' => sub {
     my ($c, $args) = @_;
 
-    my $music;
+    my $music = $c->session->get('music');
 
     my $validator = FormValidator::Lite->new( $c->req );
     $validator->set_message(
@@ -39,30 +38,36 @@ post '/vote/{music_id}' => sub {
     );
 
     my @err_msgs;
+    my $serial_code = $c->req->param('serial_code');
+
     if ($validator->has_error) {
         for my $msg ($validator->get_error_messages) {
             push @err_msgs, $msg;
         }
-
-        $music = $c->session->get('music');
-
-        return $c->render('vote.tx',
-            {
-                music => $music,
-                err_msgs => \@err_msgs
-            }
-        );
     }
     else {
-        $music = $c->session->get('music');
-        return $c->render('vote.tx', { music => $music });
+
+        my $is_valid_serial_code = $c->db->validate_serial_code($serial_code);
+
+        if ($is_valid_serial_code) {
+            return $c->redirect('/vote_complete');
+        }
+        else {
+            push @err_msgs, '既に使用されてるか存在しないシリアルコードです。';
+        }
     }
+
+    return $c->render('vote.tx',
+        {
+            music => $music,
+            err_msgs => \@err_msgs
+        }
+    );
 };
 
-get '/vote/complete' => sub {
+get '/vote_complete' => sub {
     my $c = shift;
 
-    $c->redirect('/');
     my $music = $c->session->remove('music');
 
     $c->render('vote_complete.tx', { music => $music });
