@@ -4,6 +4,7 @@ use warnings;
 use utf8;
 use Amon2::Web::Dispatcher::RouterBoom;
 use FormValidator::Lite;
+use DDP;
 
 get '/' => sub {
     my $c = shift;
@@ -30,8 +31,8 @@ post '/vote/{music_id}' => sub {
 
     my $validator = FormValidator::Lite->new( $c->req );
     $validator->set_message(
-        'serial_code.not_null' => 'not null',
-        'serial_code.length' => 'invalid length',
+        'serial_code.not_null' => 'シリアルコードを入力してください。',
+        'serial_code.length' => 'シリアルコードは英数8文字で入力してください。',
     );
     my $res = $validator->check(
         serial_code => [ 'NOT_NULL', [qw/LENGTH 8/] ],
@@ -45,7 +46,7 @@ post '/vote/{music_id}' => sub {
 
         $music = $c->session->get('music');
 
-        $c->render('vote.tx',
+        return $c->render('vote.tx',
             {
                 music => $music,
                 err_msgs => \@err_msgs
@@ -54,7 +55,7 @@ post '/vote/{music_id}' => sub {
     }
     else {
         $music = $c->session->get('music');
-        $c->render('vote.tx', { music => $music });
+        return $c->render('vote.tx', { music => $music });
     }
 };
 
