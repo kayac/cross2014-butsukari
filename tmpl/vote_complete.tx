@@ -1,0 +1,12 @@
+: cascade "include/layout.tx"
+
+: override content -> {
+
+: include "include/_vote.tx"
+
+<p>投票が完了致しました。</p>
+<p>ありがとうございました！</p>
+
+<a href="/"><i class="btn-info">Topへ戻る</i></a>
+
+: }
