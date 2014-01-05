@@ -38,11 +38,20 @@ sub _generate_serial_code {
 sub validate_serial_code {
     my ($self, $code) = @_;
 
-    if (defined $self->single('serial_code', { code => $code })) {
-        return 1;
+    my $is_valid;
+    my $serial_code = $self->single('serial_code', { code => $code });
+
+    if (defined $serial_code) {
+        $is_valid = 1;
+    }
+    else {
+        $is_valid = 0;
     }
 
-    return 0;
+    +{
+        is_valid => $is_valid,
+        serial_code => $serial_code
+    };
 }
 
 1;
