@@ -2,37 +2,7 @@
 
 : override content -> {
 
-<table class="table table-striped table-bordered">
-    : if ($music.id) {
-    <tr>
-        <th style="width:5em">
-            ID
-        </th>
-        <td>
-            <: $music.id :>
-        </td>
-    </tr>
-    : }
-    <tr>
-        <th>
-            タイトル
-        </th>
-        <td>
-            <: $music.title :>
-        </td>
-    </tr>
-    : if ($music.description) {
-    <tr>
-        <th>
-            説明
-        </th>
-        <td>
-            <: $music.description :>
-        </td>
-    </tr>
-    : }
-</table>
-
+: include "include/_vote.tx"
 
 <p>投票に必要なシリアルコードを入力してください</p>
 <form method="post" action="/vote/<: $music.id :>">
