@@ -8,6 +8,17 @@ use parent qw(Teng);
 use Sub::Retry;
 use String::Random;
 
+# 適当
+sub music_register {
+    my $self = shift;
+
+    $self->insert(
+        'music' => {
+            title => $self->_generate_serial_code,
+        }
+    );
+}
+
 sub serial_register {
     my $self = shift;
 
