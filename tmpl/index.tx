@@ -17,4 +17,6 @@
 : }
 </table>
 
+: include "include/pager.tx"{ pager => $pager };
+
 : }

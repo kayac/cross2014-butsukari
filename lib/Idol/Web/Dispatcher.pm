@@ -8,9 +8,23 @@ use FormValidator::Lite;
 get '/' => sub {
     my $c = shift;
 
-    my @music_list = $c->db->search('music');
+    my $page = $c->req->param('page') || 1;
+    # rank順に取った方が良いかもだけどひとまずidでsort
+    my ($music_list, $pager) = $c->db->search_with_pager(
+        'music' => {},
+        {
+            order_by => 'id DESC',
+            page => $page,
+            rows => 20 # const定義したい
+        }
+    );
 
-    $c->render('index.tx', { music_list => \@music_list });
+    $c->render('index.tx',
+        {
+            music_list => $music_list,
+            pager => $pager
+        }
+    );
 };
 
 get '/vote/{music_id}' => sub {
