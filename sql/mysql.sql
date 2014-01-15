@@ -6,10 +6,7 @@ CREATE UNIQUE INDEX `code_unique` ON serial_code (`code`);
 
 CREATE TABLE IF NOT EXISTS music (
     id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(191) NOT NULL,
-    description TEXT NULL,
-    itune_url TEXT NULL,
-    img_url TEXT NULL
+    title VARCHAR(191) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARACTER SET utf8mb4;
 
 CREATE TABLE IF NOT EXISTS music_rank (
