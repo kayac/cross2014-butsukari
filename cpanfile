@@ -1,5 +1,7 @@
 requires 'Amon2', '6.00';
+requires 'Amon2::DBI', '0.32';
 requires 'DBD::SQLite', '1.33';
+requires 'FormValidator::Lite', '0.37';
 requires 'HTML::FillInForm::Lite', '1.11';
 requires 'HTTP::Session2', '0.04';
 requires 'JSON', '2.50';
@@ -12,6 +14,8 @@ requires 'Test::WWW::Mechanize::PSGI';
 requires 'Text::Xslate', '2.0009';
 requires 'Time::Piece', '1.20';
 requires 'Time::Piece::Plus', '0.05';
+requires 'Sub::Retry', '0.04';
+requires 'String::Random', '0.20';
 requires 'perl', '5.010_001';
 
 on configure => sub {
