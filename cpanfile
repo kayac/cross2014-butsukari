@@ -1,6 +1,7 @@
 requires 'Amon2', '6.00';
 requires 'Amon2::DBI', '0.32';
 requires 'DBD::SQLite', '1.33';
+requires 'DBD::mysql', '4.026';
 requires 'FormValidator::Lite', '0.37';
 requires 'HTML::FillInForm::Lite', '1.11';
 requires 'HTTP::Session2', '0.04';
