@@ -3,4 +3,25 @@ cross2014-butsukari
 
 コードレビューCROSS〜ぶつかり稽古2014 初場所〜
 
-# 期間が短い中で結構なボリュームなので作りきれない可能性もあるかとは思いますが、それもまたリアルな現場感があってよいのかなと思います。
+
+# プロジェクトのセットアップ方法
+
+* move repository root
+
+`cd {repository_root}`
+
+* install dependency module
+
+`cpanm --installdeps .`
+
+* create database
+
+`mysqladmin create idol`
+
+* insert Table information
+
+`mysql -uroot idol < sql/mysql.sql`
+
+* launch application
+
+`carton exec perl -Ilib script/idol-server`
