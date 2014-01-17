@@ -25,11 +25,14 @@ sub music_register {
 sub serial_register {
     my $self = shift;
 
-    $self->insert(
-        'serial_code' => {
-            code => $self->_generate_serial_code,
-        }
-    );
+    my @requests;
+
+    for (1..1000) {
+        push (@requests, +{ code => $self->_generate_serial_code} );
+    }
+
+    $self->bulk_insert(
+        'serial_code' => \@requests);
 }
 
 sub _generate_serial_code {
