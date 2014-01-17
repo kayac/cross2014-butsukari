@@ -14,9 +14,10 @@ use String::Random;
 sub music_register {
     my $self = shift;
 
+    my $title = $self->_generate_music;
     $self->insert(
         'music' => {
-            title => $self->_generate_serial_code,
+            title => "楽曲$title",
         }
     );
 }
@@ -46,6 +47,23 @@ sub _generate_serial_code {
     die 'Generation of serial code failed because nothing' unless $serial_code;
 
     return $serial_code;
+}
+
+sub _generate_music {
+    my $self = shift;
+
+    state $sr = String::Random->new;
+    my $music_title;
+    $music_title = retry 10, 0, sub {
+        $sr->randregex('[0-9]{4}');
+    }, sub {
+        my $title = shift;
+        return $self->single('music', { title => $title }) ? 1 : 0;
+    };
+
+    die 'Generation of serial code failed because nothing' unless $music_title;
+
+    return $music_title;
 }
 
 sub validate_serial_code {
